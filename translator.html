@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        #container {
+            display: flex;
+        }
+
+        #input-area,
+        #output-area {
+            display: block;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            margin: 20px;
+            min-width: 45%;
+            min-height: 500px;
+            padding: 1%;
+            
+        }
+        #input-text{
+            min-width: 99%;
+            height: 80%;
+            border: none;
+            font-size: 25px;
+        }
+        #translateBtn{
+            display: block;
+            padding: 10px;
+            margin: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Text Translator</h1>
+    <div id="container">
+        <div id="input-area">
+            <textarea id="input-text" placeholder="Enter Text Here"></textarea>
+            <button id="translateBtn" onclick="fun()">Translate to Hindi</button>
+        </div>
+        <div id="output-area">
+
+        </div>
+    </div>
+</body>
+<script>
+
+
+    async function fun() {
+        try {
+            let inputText = document.getElementById("input-text").value
+            let res = await fetch("https://libretranslate.de/translate", {
+                method: "POST",
+                body: JSON.stringify({
+                    q: inputText,
+                    source: "en",
+                    target: "hi",
+                    format: "text",
+                }),
+                headers: { "Content-Type": "application/json" }
+            });
+
+            let box = document.querySelector("#output-area")
+            box.innerHTML = ""
+            let data = await res.json()
+            console.log(data.translatedText)
+            var p = document.createElement("p")
+            p.innerText = data.translatedText
+            box.append(p)
+
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+</script>
+
+</html>
